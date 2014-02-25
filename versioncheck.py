@@ -1,4 +1,14 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+#-------------------------------------------------------------------------------
+# Copyright (c) 2014 Markus Schiesser.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the GNU Public License v3.0
+# which accompanies this distribution, and is available at
+# http://www.gnu.org/licenses/gpl.html
+# 
+# Contributors:
+#     Markus Schiesser - initial API and implementation
+#-------------------------------------------------------------------------------
 
 import sys
 import os
@@ -15,7 +25,7 @@ class CSVfile(object):
 
  #       self._csvfile = csvfile
         self._resultfile = resultfile
-        self._tempfile = 'tempfile.csv'
+        self._tempfile = 'tempfile.temp'
         
         self.Copyfile(csvfile,self._tempfile)
         
@@ -23,7 +33,7 @@ class CSVfile(object):
  #       os.remove(self._tempfile)
         if os.path.isfile(self._tempfile):
             os.remove(self._tempfile)
-            print "Delete Object"
+           # print "Delete Object"
         
     def Copyfile(self, source, dest, buffer_size=1024*1024):
         """
@@ -91,7 +101,7 @@ class CSVfile(object):
     def WriteFile(self,data):
         
   #      print data
-        print "Resultfile", self._resultfile
+    #    print "Resultfile", self._resultfile
         resultFile = csv.DictWriter(open(self._resultfile,"wb"),
                                 ["RESULT","DETAIL","BRD_TYPE", "BOM", "SERIAL", "NE_NAME","NE_TYPE", "RACK",
                                   "SLOT", "SW_EXP", "SW_ACT", "FPGA_EXP", "FPGA_ACT"])
@@ -296,7 +306,7 @@ if __name__ == '__main__':
         referenceFile = sys.argv[1]
         inventoryFile = sys.argv[2]
         resultFile = sys.argv[3]
-        print "Debug Parameter", referenceFile, inventoryFile, resultFile
+ #       print "Debug Parameter", referenceFile, inventoryFile, resultFile
     else:
         resultFile = 'result.csv'
         inventoryFile = 'inventory.csv'
@@ -305,12 +315,12 @@ if __name__ == '__main__':
     
     reference = CSVfile(referenceFile)
     reference.OpenFile()
-    print "reference", len(reference.InstanceList())
+ #   print "reference", len(reference.InstanceList())
     
     inventory = CSVfile(inventoryFile,resultFile)
     inventory.RemoveHaeder()
     inventory.OpenFile()
-    print "Inventory",len(inventory.InstanceList())
+  #  print "Inventory",len(inventory.InstanceList())
     
     compare = Compare(reference.InstanceList(), inventory.InstanceList())
     resultdata = compare.Filter()
