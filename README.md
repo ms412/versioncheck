@@ -11,7 +11,11 @@ Tool checks version board version of Huawei Transport Platform against the offic
 
 Reference File:
 contains at least following informations per board in CSV format either separated by ',' or ';'
-'Board BOM Item','Board Type','Subrack Type',Software Version','FPGA Version'
+		Board BOM Item
+		Board Type
+		Subrack Type
+		Software Version
+		FPGA Version
 
 Inventory File:
 
