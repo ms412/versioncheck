@@ -128,7 +128,7 @@ class Board(object):
         self._NE_TYPE = dict.get('Subrack Type')
         self._FPGA = dict.get('FPGA Version')
         
-        self._SERIAL = dict.get('Board BOM Item',None)
+        self._SERIAL = dict.get('Board Bar Code',None)
         self._NE_NAME = dict.get('NE',None)
         self._RACK = dict.get('Subrack ID',None)
         self._SLOT = dict.get('Slot ID',None)
@@ -171,25 +171,25 @@ class Compare(object):
         self._inventoryList = inventoryList
         self._result = []
         
-    def Search(self, item, value):
+ #   def Search(self, item, value):
 
-        result = getattr(item,value)()
+ #       result = getattr(item,value)()
 #        print "Search::Result", result
-        resultList = []
+  #      resultList = []
         
-        for referenceItem in self._referenceList:
-            referenceValue = getattr(referenceItem, value)()
+ #       for referenceItem in self._referenceList:
+  #          referenceValue = getattr(referenceItem, value)()
  #           print "Search Reverence value", referenceValue
-            if result.find(referenceValue) > -1:
-                resultList.append(referenceItem)
+#            if result.find(referenceValue) > -1:
+#                resultList.append(referenceItem)
             
   #          if result.find(referenceItem.value()) > -1:
    #             resultList.append(referenceItem) 
                 
   #      print "Search::resultLsit", resultList
-        return resultList
+ #       return resultList
     
-    def Searchnew(self, referenceList, item, value):
+    def Search(self, referenceList, item, value):
 
         result = getattr(item,value)()
     #    print "Search::Result", result
@@ -213,23 +213,26 @@ class Compare(object):
 
         for inventoryItem in self._inventoryList:
             validBoard = False
-            statusmsg = 'NOK'
+            resultmsg = 'EMPTY'
+            detailmsg = 'EMPTY'
+            ne_type = 'UNKNOWN'
 
             
             ''' 
             if NE type and board found in reference only once -> OK
             else board or NE not defined or multiple definitions of board in reference list
             '''
-            referenceList = self.Searchnew(self._referenceList,inventoryItem,'BRD_TYPE')
+            referenceList = self.Search(self._referenceList,inventoryItem,'BRD_TYPE')
   #          print "BoardType",len(referenceList)
             
             if len(referenceList) != 0:
-                referenceItem = self.Searchnew(referenceList, inventoryItem,'NE_TYPE')
+                referenceItem = self.Search(referenceList, inventoryItem,'NE_TYPE')
                 
    #             print "NE Type",len(referenceList)
                 if len(referenceItem) == 1:
                     validBoard = True
                     resultmsg = 'OK'
+                    ne_type = referenceItem[0].NE_TYPE()
                 elif len(referenceItem) >= 1:
                     validBoard = False
                     detailmsg = 'Multiple Definitions of Board'
@@ -273,8 +276,8 @@ class Compare(object):
                     detailmsg = 'FPGA::FAILED'
         #            print "FPGA not found", referenceItem[0].FPGA()
                 
-                ''
-                if 'OK' in resultmsg:  
+                if 'NOK' not in resultmsg:  
+#                if resultmsg.find('OK') != -1:
                     if inventoryItem.BRD_SW() == referenceItem[0].BRD_SW():
                         resultmsg = 'OK'
                         detailmsg = detailmsg + ' ' + 'SW::OK'
@@ -283,19 +286,19 @@ class Compare(object):
                         detailmsg = detailmsg + ' ' + 'SW::FAILED'
                 else:
                     if inventoryItem.BRD_SW() == referenceItem[0].BRD_SW():
-                        detailsmsg = detailmsg + ' ' + 'SW::OK'
+                        detailmsg = detailmsg + ' ' + 'SW::OK'
                     else:
                         resultmsg = 'NOK'
                         detailmsg = detailmsg + ' ' + 'SW::FAILED'
                     
                     
                 self._result.append({"RESULT":resultmsg,"DETAIL":detailmsg,"BRD_TYPE":inventoryItem.BRD_TYPE(),"BOM":inventoryItem.BOM(),
-                                         "SERIAL":inventoryItem.SERIAL(),"NE_NAME":inventoryItem.NE_NAME(),"RACK":inventoryItem.RACK(),"SLOT":inventoryItem.SLOT(),
+                                         "SERIAL":inventoryItem.SERIAL(),"NE_NAME":inventoryItem.NE_NAME(),"NE_TYPE":ne_type,"RACK":inventoryItem.RACK(),"SLOT":inventoryItem.SLOT(),
                                          "SW_EXP":referenceItem[0].BRD_SW(),"SW_ACT":inventoryItem.BRD_SW(),"FPGA_EXP":referenceItem[0].FPGA(),
                                           "FPGA_ACT":inventoryItem.FPGA()})
             else:
                 self._result.append({"RESULT":resultmsg,"DETAIL":detailmsg,"BRD_TYPE":inventoryItem.BRD_TYPE(),"BOM":inventoryItem.BOM(),
-                                "SERIAL":inventoryItem.SERIAL(),"NE_NAME":inventoryItem.NE_NAME(),"RACK":inventoryItem.RACK(),"SLOT":inventoryItem.SLOT()}) 
+                                "SERIAL":inventoryItem.SERIAL(),"NE_NAME":inventoryItem.NE_NAME(),"NE_TYPE":ne_type,"RACK":inventoryItem.RACK(),"SLOT":inventoryItem.SLOT()}) 
                 
  #           print self._result
         return self._result
