@@ -5,7 +5,7 @@ Tool checks version board version of Huawei Transport Platform against the offic
 
 ### Call the tool
 
-./versioncheck.py [Reference File][Inventory File][Output File]
+`./versioncheck.py [Reference File][Inventory File][Output File]`
 
 ### Requirements
 
@@ -18,6 +18,7 @@ contains at least following informations per board in CSV format either separate
 + FPGA Version
 
 ##### 2. Inventory File:
+contains at least following informations per board in CSV format either separated by `,` or `;`
 
 + Board BOM Item
 + Board Type
