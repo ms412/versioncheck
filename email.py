@@ -6,6 +6,7 @@ Created on Feb 27, 2014
 
 import smtplib
 import os
+import sys
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
@@ -44,18 +45,18 @@ class smtpHandle(object):
         
         self._smtp = smtplib.SMTP(self._smtpServer)
         
-    def disconnectSmpt(self):
+    def disconnectSmtp(self):
         
-        self._smtp.close('gd2imail.swissptt.ch')    
+        self._smtp.close()    
         
     def sendSmtp(self, mailmsg):
         
-        for sendTo in self._sentToList:
+        for sendTo in self._sendToList:
             self._smtp.sendmail(self._sendFrom, sendTo,mailmsg.as_string())
                
     def subject(self,subject):
         
-        self._subject
+        self._subject = subject
         
     def message(self, msg):
         
@@ -75,7 +76,7 @@ class smtpHandle(object):
         
         mailmsg.attach(MIMEText(self._message))
         
-        if self._attachement < 1:
+        if self._attachement >= 1:
             for filename in self._attachement:
                 part = MIMEBase('application', "octet-stream")
                 part.set_payload( open(filename,"rb").read() )
@@ -86,11 +87,24 @@ class smtpHandle(object):
         self.connectSmtp()
         self.sendSmtp(mailmsg)
         self.disconnectSmtp()
-
+    
 if __name__ == '__main__':
-    smtp = smtpHandle()
+
+
+    smtp = smtpHandle('gd2imail.swissptt.ch')
+
+    for i in range(len(sys.argv)):
+        if i == 0:
+            print "firts",(sys.argv[i])
+        else:
+            smtp.attachement(sys.argv[i])
+
     smtp.send_to('Markus.Schiesser@swisscom.com')
+    smtp.send_to('M.Schiesser@gmail.com')
+    smtp.send_to('tgdscm41@gmail.com')
     smtp.send_from('Test@swisscom.com')
     smtp.subject('Subject1234')
     smtp.message('Test,TEST.test')
+    smtp.sendMail()
+
         
