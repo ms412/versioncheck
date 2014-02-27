@@ -15,6 +15,8 @@ import os
 import sys
 import csv
 
+from email import smtpHandle
+
 
 class CSVfile(object):
     '''
@@ -116,7 +118,7 @@ class CSVfile(object):
         '''
         resultFile = csv.DictWriter(open(self._resultfile,"wb"),
                                 ["RESULT","DETAIL","BRD_TYPE", "BOM", "SERIAL", "NE_NAME","NE_TYPE", "RACK",
-                                  "SLOT", "SW_EXP", "SW_ACT", "FPGA_EXP", "FPGA_ACT"])
+                                  "SLOT", "SW_EXP", "SW_ACT", "FPGA_EXP", "FPGA_ACT"], delimiter = ";")
         
         resultFile.writerow({"RESULT":"Result","DETAIL":"Detail","BRD_TYPE":"Board Type", "BOM":"BOM", "SERIAL":"Serial Number",
                          "NE_NAME":"NE Name","NE_TYPE": "NE Type", "RACK":"Rack", 
@@ -311,6 +313,20 @@ if __name__ == '__main__':
     inventory.RemoveHaeder()
     inventory.OpenFile()
     
+    print "Number of Reference Objects:",len(reference.InstanceList())
+    print "Number of Inventory Objects:",len(inventory.InstanceList())
+    
+    print "Verifiy Software and FPGA"
     compare = Compare(reference.InstanceList(), inventory.InstanceList())
     resultdata = compare.Filter()
     inventory.WriteFile(resultdata)
+    
+    print "Send email...."
+    smtp = smtpHandle('gd2imail.swissptt.ch')            
+    smtp.attachement(resultFile)
+    smtp.send_to('Markus.Schiesser@swisscom.com')
+
+    smtp.send_from('VersionCheck@sonate.com')
+    smtp.subject('VersionCheck')
+    smtp.message('VersionCheck Result')
+    smtp.sendMail()

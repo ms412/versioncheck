@@ -19,7 +19,7 @@ class smtpHandle(object):
     classdocs
     '''
 
-    def __init__(self, smtpServer, sendFrom = 'automailer@swisscom.com'):
+    def __init__(self, smtpServer='gd2imail.swissptt.ch', sendFrom = 'automailer@swisscom.com'):
         '''
         Constructor
         '''
