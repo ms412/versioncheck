@@ -15,7 +15,7 @@ import os
 import sys
 import csv
 
-from email import smtpHandle
+from libemail import smtpHandle
 
 
 class CSVfile(object):
@@ -321,7 +321,7 @@ if __name__ == '__main__':
     resultdata = compare.Filter()
     inventory.WriteFile(resultdata)
     
-    print "Send email...."
+    print "Send libemail...."
     smtp = smtpHandle('gd2imail.swissptt.ch')            
     smtp.attachement(resultFile)
     smtp.send_to('Markus.Schiesser@swisscom.com')
