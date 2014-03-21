@@ -1,0 +1,34 @@
+[Server1]
+hostname = hosonedp1
+user = tgdscm41
+passwd = Swisscom10
+path = /opt/oss/client/client/report/inventoryDump
+filename = Board_Report*
+
+[Server2]
+hostname = hosonedu1
+user = tgdscm41
+passwd = Swisscom10
+path = /opt/oss/client/client/report/inventoryDump
+filename = Board_Report*
+
+[Server3]
+hostname = hosontst1
+user = tgdscm41
+passwd = Swisscom10
+path = /opt/oss/client/client/report/inventoryDump
+filename = Board_Report*
+
+[Server4]
+hostname = hosontst1
+user = tgdscm41
+passwd = Swisscom10
+path = /opt/oss/client/client/report/inventoryDump
+filename = Board_Report*
+
+[Server]
+hostname = hosontst1
+user = tgdscm41
+passwd = Swisscom10
+path = /opt/oss/client/client/report/inventoryDump
+filename = Board_Report*
